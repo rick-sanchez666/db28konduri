@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+  - results = [{company: 'Mercedes Benz', isAutomatic: true, makeYear: 2020}, {company: 'Audi', isAutomatic: false, makeYear: 2021},{company: 'BMW', isAutomatic: true, makeYear: 2010} ]
+  div(class="container-fluid")
+      each item,index in results
+        div(class="row")
+          div(class="col-sm-2", style="cursor:pointer", onclick=`buy(${index})`)  #{item.company}
+          div(class="col-sm-2", style="cursor:pointer",onclick=`buy(${index})`)  #{item.makeYear}
+          div(class="col-sm-2", style="cursor:pointer",onclick=`buy(${index})`)  #{item.isAutomatic}
+  script. 
+    function buy(index) {
+      alert(`Purchased item ${index + 1}` )
+    }
