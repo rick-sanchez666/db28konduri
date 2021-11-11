@@ -9,6 +9,9 @@ var costume_controller = require('../controllers/costume');
  
 // GET resources base. 
 router.get('/', api_controller.api);
+
+router.get('/costumes', costume_controller.costume_list);
+
  
 /// COSTUME ROUTES /// 
  
@@ -26,7 +29,6 @@ costume_controller.costume_update_put);
 router.get('/costumes/:id', costume_controller.costume_detail); 
  
 // GET request for list of all Costume items. 
-router.get('/costumes', costume_controller.costume_list); 
  
 module.exports = router; 
 

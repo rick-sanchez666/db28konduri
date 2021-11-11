@@ -11,6 +11,7 @@ const resoureRouter = require('./routes/resource')
 const addModRouter = require('./routes/addmods');
 const selectorRouter = require('./routes/selector');
 const Costume = require("./models/costume");
+const dcComicsRouter = require("./routes/dccomics")
 var app = express();
  
 const connectionString =  process.env.MONGO_CON;
@@ -36,6 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/resource', resoureRouter);
+app.use('/dc-comics', dcComicsRouter);
 app.use('/users', usersRouter);
 app.use('/car', carRouter);
 app.use('/addmods', addModRouter);
