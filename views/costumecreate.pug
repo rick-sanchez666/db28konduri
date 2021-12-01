@@ -25,6 +25,9 @@ block content
       }).then((resp) => { 
         return resp.json(); // or resp.text() or whatever the server sends 
       }).then((body) => { 
+        if(body.error) {
+         return alert(body.error)
+        }
         alert("Save succeded");
       window.location.href='/dc-comics' 
 
@@ -33,4 +36,4 @@ block content
         // TODO handle error 
         alert("Save failed " + error ) 
       }); 
-    }); 
+    });   

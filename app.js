@@ -12,22 +12,12 @@ const addModRouter = require('./routes/addmods');
 const selectorRouter = require('./routes/selector');
 const Costume = require("./models/costume");
 const dcComicsRouter = require("./routes/dccomics");
+var Account = require('./models/account'); 
+
 var passport = require('passport'); 
 var LocalStrategy = require('passport-local').Strategy; 
 var app = express();
-passport.use(new LocalStrategy( 
-  function(username, password, done) { 
-    Account.findOne({ username: username }, function (err, user) { 
-      if (err) { return done(err); } 
-      if (!user) { 
-        return done(null, false, { message: 'Incorrect username.' }); 
-      } 
-      if (!user.validPassword(password)) { 
-        return done(null, false, { message: 'Incorrect password.' }); 
-      } 
-      return done(null, user); 
-    }); 
-  }))
+
 const connectionString =  process.env.MONGO_CON;
 console.log(connectionString)
 mongoose.connect(connectionString,{useNewUrlParser: true, useUnifiedTopology: true}); 
@@ -79,14 +69,39 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+passport.use(new LocalStrategy( 
+  function(username, password, done) { 
+    Account.findOne({ username: username }, function (err, user) { 
+      if (err) { return done(err); } 
+      if (!user) { 
+        return done(null, false, { message: 'Incorrect username.' }); 
+      } 
+      console.log(user)
+      if ( user.validPassword && !user.validPassword(password)) { 
+        return done(null, false, { message: 'Incorrect password.' }); 
+      } 
+      return done(null, user); 
+    }); 
+  }))
+
+  passport.serializeUser(function(user, done) {
+    done(null, user.id);
+  });
+  
+  passport.deserializeUser(function(id, done) {
+    Account.findById(id, function(err, user) {
+      done(err, user);
+    });
+  });
+
 
 async function recreateDB(){ 
   // Delete everything 
   await Costume.deleteMany(); 
  
-  let instance1 = new Costume({costume_type:"ghost",  size:'large', cost:25.4}); 
-  let instance2 = new Costume({costume_type:"Joker",  size:'Medium', cost:29.4}); 
-  let instance3 = new Costume({costume_type:"Batman",  size:'small', cost:2.4}); 
+  let instance1 = new Costume({costume_type:"ghost",  size:'large', cost:125.4}); 
+  let instance2 = new Costume({costume_type:"Joker",  size:'Medium', cost:129.4}); 
+  let instance3 = new Costume({costume_type:"Batman",  size:'small', cost:112.4}); 
 
   instance1.save( function(err,doc) { 
       if(err) return console.error(err); 
